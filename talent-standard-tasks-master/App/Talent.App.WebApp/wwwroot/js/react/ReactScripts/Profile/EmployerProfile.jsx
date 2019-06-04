@@ -10,6 +10,7 @@ import AuthenticatingBanner from '../Layout/Banner/AuthenticatingBanner.jsx';
 import { LoggedInNavigation } from '../Layout/LoggedInNavigation.jsx';
 import { IndividualDetailSection, CompanyDetailSection } from './ContactDetail.jsx';
 import { BodyWrapper, loaderData } from '../Layout/BodyWrapper.jsx';
+import { Dropdown, Button } from 'semantic-ui-react';
 
 export default class EmployeeProfile extends React.Component {
     constructor(props) {
@@ -22,7 +23,16 @@ export default class EmployeeProfile extends React.Component {
             nameValid: false,
             emailValid: false,
             formValid: true,
-            loaderData: loaderData
+            loaderData: loaderData,
+            students: [
+                { id: 1, name: 'Arabic', age: 21, email: 'Basic' },
+                { id: 2, name: 'Hindi', age: 19, email: 'Basic' },
+                { id: 3, name: 'Maori', age: 16, email: 'Basic' },
+                { id: 4, name: 'German', age: 25, email: 'Basic' }
+            ],
+            studentnew: [
+                { id: 7, name: 'English', age: 21, email: 'Profecient' }
+            ]
         };
 
         this.loadData = this.loadData.bind(this);
@@ -35,6 +45,7 @@ export default class EmployeeProfile extends React.Component {
         this.updateAndSaveData = this.updateAndSaveData.bind(this);
         this.saveData = this.saveData.bind(this);
         this.init = this.init.bind(this);
+        this.AddLanguage = this.AddLanguage.bind(this);
     };
 
     init() {
@@ -49,6 +60,20 @@ export default class EmployeeProfile extends React.Component {
         this.loadData()
     }
 
+    renderTableData() {
+        return this.state.students.map((student, index) => {
+            const { id, name, age, email } = student; //destructuring
+            return (
+                <tr key={id}>
+                    <td>{id}</td>
+                    <td>{name}</td>
+                    <td>{age}</td>
+                    <td>{email}</td>
+                </tr>
+            );
+        });
+    }
+   
     loadData() {
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
@@ -149,6 +174,19 @@ export default class EmployeeProfile extends React.Component {
     isFormValid() {
         return this.state.formValid == false ? 'error' : '';
     }
+    AddLanguage(event) {
+        // this.event.preventDefault();
+        event.preventDefault();
+        alert("Added to Array");
+       // event.target.name = event.target.value;
+
+        console.log(students);
+        
+        this.setState({
+            students: this.state.students.concat(this.state.studentnew)
+        });
+        console.log(students);
+    }
 
     saveData() {
 
@@ -174,10 +212,24 @@ export default class EmployeeProfile extends React.Component {
             error: function (res) {
                 TalentUtil.notification.show("Error while saving Employer details", "error", null, null);
             }.bind(this)
-        })
+        });
     }
 
     render() {
+        const Options = [
+            {
+                key: 'Kiwi',
+                text: 'Kiwi',
+                value: 'Kiwi',
+                image: { avatar: true, src: '/images/avatar/small/jenny.jpg' }
+            },
+            {
+                key: 'Indian',
+                text: 'Indian',
+                value: 'Indian',
+                image: { avatar: true, src: '/images/avatar/small/elliot.jpg' }
+
+            }];
         return (
             <BodyWrapper loaderData={this.state.loaderData} reload={this.loadData}>
                 <section className="page-body">
@@ -212,11 +264,27 @@ export default class EmployeeProfile extends React.Component {
                                             title='Display profile'
                                             tooltip='Toggle company profile visibility in the employer feed.'
                                             hideSegment={true}
+                                            
                                         >
                                             <Toggle
                                                 updateStateData={this.updateWithoutSave}
                                                 displayProfile={this.state.employerData.displayProfile}
+                                            />Nationality : <Dropdown
+                                                placeholder='select'
+                                                fluid
+                                                selection
+                                                options={Options}
                                             />
+                                            Languages:
+                                            <Button class="ui button" onClick={this.AddLanguage}>Add New</Button>
+                                            <div>
+                                                <h1 id='title'>React Dynamic Table</h1>
+                                                <table id='students'>
+                                                    <tbody>
+                                                        {this.renderTableData()}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </FormItemWrapper>
                                         <div className="sixteen wide column">
                                             <div>

@@ -6,5 +6,6 @@ namespace Talent.Common.Events
 {
     public interface IEvent
     {
+
     }
 }
