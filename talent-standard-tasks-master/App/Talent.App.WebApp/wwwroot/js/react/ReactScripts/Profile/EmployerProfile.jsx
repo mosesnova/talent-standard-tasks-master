@@ -306,7 +306,7 @@ export default class EmployeeProfile extends React.Component {
                                             Languages:
                                             <Button className="ui button" onClick={this.AddLanguage}>Add New</Button>
                                             <div>
-                                                <h1 id='title'>React Editable Dynamic Table</h1>
+                                                <h1 id='title'>Language Component</h1>
                                                 <table id='students'>
                                                     <tbody>
                                                         {this.renderTableData()}
@@ -328,6 +328,20 @@ export default class EmployeeProfile extends React.Component {
                                                 details={this.state.employerData.primaryContact}
                                                 componentId='LinkedComponent'
                                             />
+                                        </FormItemWrapper>
+                                        <FormItemWrapper
+                                            title='Work Experience Component'
+                                            tooltip='Enter your linked details'
+                                        >
+                                            <Button className="ui button" onClick={this.AddLanguage}>Add New</Button>
+                                            <div>
+                                                <h1 id='title'>Work Exprience Component</h1>
+                                                <table id='students'>
+                                                    <tbody>
+                                                        {this.renderTableData()}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </FormItemWrapper>
                                         <div className="sixteen wide column">
                                             <div>
