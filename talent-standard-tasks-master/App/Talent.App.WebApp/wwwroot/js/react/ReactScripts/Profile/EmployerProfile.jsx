@@ -34,6 +34,16 @@ export default class EmployeeProfile extends React.Component {
                 { id: 3, name: 'Maori', age: 16, email: 'Basic' },
                 { id: 4, name: 'German', age: 25, email: 'Basic' }
             ],
+            skills: [
+                { id: 1, name: 'C',  level: 'Basic' },
+                { id: 2, name: 'C#', level: 'Profecient' },
+                { id: 3, name: 'MVC',level: 'Basic' }
+            ],
+            workexperiences: [
+                { id: 1, company: 'Company1', position: 'Software Developer', responsibilities:'coding', start:'1/1/2010',end:'1/1/2010' },
+                { id: 2, company: 'Company2', position: 'Software Developer', responsibilities: 'coding', start: '1/1/2010', end: '1/1/2010'  },
+                { id: 3, company: 'Company3', position: 'Software Developer', responsibilities: 'coding', start: '1/1/2010', end: '1/1/2010'  }
+            ],
             studentnew: [
                 { id: 7, name: 'English', age: 21, email: 'Profecient' }
             ],
@@ -85,6 +95,37 @@ export default class EmployeeProfile extends React.Component {
                     <td><input defaultValue={name} onChange={this.logChange} type="text" /></td>
                     <td>{age}</td>
                     <td>{email}</td>
+                    <td><Button>Edit</Button></td>
+                    <td><Button>Delete</Button></td>
+                </tr>
+            );
+        });
+    }
+    renderSkillTableData() {
+        return this.state.skills.map((skill, index) => {
+            const { id, name, level } = skill; //destructuring
+            return (
+                <tr key={id}>
+                    <td><input value={id} onChange={this.logChange} type="text" /></td>
+                    <td><input defaultValue={name} onChange={this.logChange} type="text" /></td>
+                    <td>{level}</td>
+                    <td><Button>Edit</Button></td>
+                    <td><Button>Delete</Button></td>
+                </tr>
+            );
+        });
+    }
+    renderWorkExperienceTableData() {
+        return this.state.workexperiences.map((workexperience, index) => {
+            const { id, company, position,responsibilities,start,end } = workexperience; //destructuring
+            return (
+                <tr key={id}>
+                    <td><input value={id} onChange={this.logChange} type="text" /></td>
+                    <td><input defaultValue={company} onChange={this.logChange} type="text" /></td>
+                    <td><input defaultValue={position} onChange={this.logChange} type="text" /></td>
+                    <td><input defaultValue={responsibilities} onChange={this.logChange} type="text" /></td>
+                    <td><input defaultValue={start} onChange={this.logChange} type="text" /></td>
+                    <td><input defaultValue={end} onChange={this.logChange} type="text" /></td>
                     <td><Button>Edit</Button></td>
                     <td><Button>Delete</Button></td>
                 </tr>
@@ -330,18 +371,43 @@ export default class EmployeeProfile extends React.Component {
                                             />
                                         </FormItemWrapper>
                                         <FormItemWrapper
+                                            title='Skill Component'
+                                            tooltip='Enter your linked details'
+                                        >
+                                            <Button className="ui button" onClick={this.AddLanguage}>Add New</Button>
+                                            <div>
+                                                <h1 id='title'>Skill Component</h1>
+                                                <table id='students'>
+                                                    <tbody>
+                                                        {this.renderSkillTableData()}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </FormItemWrapper>
+                                        <FormItemWrapper
                                             title='Work Experience Component'
                                             tooltip='Enter your linked details'
                                         >
                                             <Button className="ui button" onClick={this.AddLanguage}>Add New</Button>
                                             <div>
-                                                <h1 id='title'>Work Exprience Component</h1>
+                                                <h1 id='title'>Work Experience Component</h1>
                                                 <table id='students'>
                                                     <tbody>
-                                                        {this.renderTableData()}
+                                                        {this.renderWorkExperienceTableData()}
                                                     </tbody>
                                                 </table>
                                             </div>
+                                        </FormItemWrapper>
+                                        <FormItemWrapper
+                                            title='Visa Status'
+                                            tooltip='Enter your linked details'
+                                        >
+                                            <Dropdown
+                                                placeholder='select'
+                                                fluid
+                                                selection
+                                                options={Options}
+                                            />
                                         </FormItemWrapper>
                                         <div className="sixteen wide column">
                                             <div>
