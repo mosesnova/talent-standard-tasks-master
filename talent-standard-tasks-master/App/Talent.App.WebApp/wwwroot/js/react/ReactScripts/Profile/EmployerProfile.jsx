@@ -11,6 +11,10 @@ import { LoggedInNavigation } from '../Layout/LoggedInNavigation.jsx';
 import { IndividualDetailSection, CompanyDetailSection } from './ContactDetail.jsx';
 import { BodyWrapper, loaderData } from '../Layout/BodyWrapper.jsx';
 import { Dropdown, Button } from 'semantic-ui-react';
+import Lightbox from 'react-images';
+import { LinkedAccountsComponent } from './LinkedAccountsComponent.jsx';
+
+
 
 export default class EmployeeProfile extends React.Component {
     constructor(props) {
@@ -32,7 +36,9 @@ export default class EmployeeProfile extends React.Component {
             ],
             studentnew: [
                 { id: 7, name: 'English', age: 21, email: 'Profecient' }
-            ]
+            ],
+            selectedFile: null,
+            imageName:''
         };
 
         this.loadData = this.loadData.bind(this);
@@ -46,6 +52,10 @@ export default class EmployeeProfile extends React.Component {
         this.saveData = this.saveData.bind(this);
         this.init = this.init.bind(this);
         this.AddLanguage = this.AddLanguage.bind(this);
+        this.logChange = this.logChange.bind(this);
+        this.fileChangedHandler = this.fileChangedHandler.bind(this);
+        this.uploadHandler = this.uploadHandler.bind(this);
+       
     };
 
     init() {
@@ -57,23 +67,40 @@ export default class EmployeeProfile extends React.Component {
     }
 
     componentDidMount() {
-        this.loadData()
+        this.loadData();
     }
+    logChange(e) {
+        this.setState({
+            value: e.target.value
+        });
+        console.log(this.state.value);
 
+    }
     renderTableData() {
         return this.state.students.map((student, index) => {
             const { id, name, age, email } = student; //destructuring
             return (
                 <tr key={id}>
-                    <td>{id}</td>
-                    <td>{name}</td>
+                    <td><input value={id} onChange={this.logChange} type="text" /></td>
+                    <td><input defaultValue={name} onChange={this.logChange} type="text" /></td>
                     <td>{age}</td>
                     <td>{email}</td>
+                    <td><Button>Edit</Button></td>
+                    <td><Button>Delete</Button></td>
                 </tr>
             );
         });
     }
-   
+    fileChangedHandler(event)  {
+        this.setState({ selectedFile: event.target.files[0] });
+        
+    }
+    uploadHandler(event) {
+        event.preventDefault();
+        var img = this.state.selectedFile.name;
+        this.setState({ imageName: '/images/avatar/small/elliot.jpg' });
+        console.log(this.state.selectedFile.name);
+    }
     loadData() {
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
@@ -101,6 +128,7 @@ export default class EmployeeProfile extends React.Component {
     }
 
     updateForComponentId(componentId, newValues) {
+        console.log("ehh");
         let data = {};
         data[componentId] = newValues;
         this.updateAndSaveData(data)
@@ -276,15 +304,30 @@ export default class EmployeeProfile extends React.Component {
                                                 options={Options}
                                             />
                                             Languages:
-                                            <Button class="ui button" onClick={this.AddLanguage}>Add New</Button>
+                                            <Button className="ui button" onClick={this.AddLanguage}>Add New</Button>
                                             <div>
-                                                <h1 id='title'>React Dynamic Table</h1>
+                                                <h1 id='title'>React Editable Dynamic Table</h1>
                                                 <table id='students'>
                                                     <tbody>
                                                         {this.renderTableData()}
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            Profile Photo:
+                                            <img src="http://www.croop.cl/UI/twitter/images/doug.jpg"  alt="logo" />
+                                           
+                                           <button onClick={this.uploadHandler}>Upload!</button>
+                                        </FormItemWrapper>
+
+                                        <FormItemWrapper
+                                            title='Linked Account Details'
+                                            tooltip='Enter your linked details'
+                                        >
+                                            <LinkedAccountsComponent
+                                                controlFunc={this.updateForComponentId}
+                                                details={this.state.employerData.primaryContact}
+                                                componentId='LinkedComponent'
+                                            />
                                         </FormItemWrapper>
                                         <div className="sixteen wide column">
                                             <div>

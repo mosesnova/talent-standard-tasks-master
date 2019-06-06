@@ -6,6 +6,8 @@ import { Loader } from 'semantic-ui-react';
 import CompanyProfile from '../TalentFeed/CompanyProfile.jsx';
 import FollowingSuggestion from '../TalentFeed/FollowingSuggestion.jsx';
 import { BodyWrapper, loaderData } from '../Layout/BodyWrapper.jsx';
+import { Player } from 'video-react';
+
 
 export default class TalentFeed extends React.Component {
     constructor(props) {
@@ -42,11 +44,18 @@ export default class TalentFeed extends React.Component {
 
    
     render() {
-
         return (
             <BodyWrapper reload={this.init} loaderData={this.state.loaderData}>
-                <div className="ui container">Your code goes here</div>
+                <div className="ui container">Scroll Below to view the MP4 Player</div>
+                <Player 
+                    playsInline
+                    poster="/assets/poster.png"
+                    width="50%"
+                    height="50%"
+                    fluid="false"
+                    src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+                />
             </BodyWrapper>
-        )
+        );
     }
 }
