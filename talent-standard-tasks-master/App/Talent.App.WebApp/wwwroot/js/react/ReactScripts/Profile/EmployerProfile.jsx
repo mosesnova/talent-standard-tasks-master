@@ -293,9 +293,9 @@ export default class EmployeeProfile extends React.Component {
                 image: { avatar: true, src: '/images/avatar/small/jenny.jpg' }
             },
             {
-                key: 'Indian',
-                text: 'Indian',
-                value: 'Indian',
+                key: 'Chinese',
+                text: 'Chinese',
+                value: 'Chinese',
                 image: { avatar: true, src: '/images/avatar/small/elliot.jpg' }
 
             }];
