@@ -12,6 +12,7 @@
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <AssemblyName>Talent.Services.Talent</AssemblyName>
     <RootNamespace>Talent.Services.Talent</RootNamespace>
+    <UserSecretsId>85f2ee1c-4545-46db-8df6-65808fe800d0</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

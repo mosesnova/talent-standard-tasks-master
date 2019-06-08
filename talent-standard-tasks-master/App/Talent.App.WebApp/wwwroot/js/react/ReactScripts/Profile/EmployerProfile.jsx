@@ -13,6 +13,7 @@ import { BodyWrapper, loaderData } from '../Layout/BodyWrapper.jsx';
 import { Dropdown, Button } from 'semantic-ui-react';
 import Lightbox from 'react-images';
 import { LinkedAccountsComponent } from './LinkedAccountsComponent.jsx';
+import { Location } from '../Employer/CreateJob/Location.jsx';
 
 
 
@@ -338,12 +339,15 @@ export default class EmployeeProfile extends React.Component {
                                             <Toggle
                                                 updateStateData={this.updateWithoutSave}
                                                 displayProfile={this.state.employerData.displayProfile}
-                                            />Nationality : <Dropdown
+                                            />Nationality :
+                                            <Dropdown
                                                 placeholder='select'
                                                 fluid
                                                 selection
                                                 options={Options}
                                             />
+                                            Location:
+                                            <Location location={location} handleChange={this.handleChange} />
                                             Languages:
                                             <Button className="ui button" onClick={this.AddLanguage}>Add New</Button>
                                             <div>
