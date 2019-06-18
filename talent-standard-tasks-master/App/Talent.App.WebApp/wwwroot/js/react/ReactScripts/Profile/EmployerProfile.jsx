@@ -46,10 +46,14 @@ export default class EmployeeProfile extends React.Component {
                 { id: 3, company: 'Company3', position: 'Software Developer', responsibilities: 'coding', start: '1/1/2010', end: '1/1/2010'  }
             ],
             studentnew: [
-                { id: 7, name: 'English', age: 21, email: 'Profecient' }
+                { id: null, name: null, age: null, email: null }
             ],
             selectedFile: null,
-            imageName:''
+            imageName: '',
+            id: '',
+            name: '',
+            age: '',
+            email:''
         };
 
         this.loadData = this.loadData.bind(this);
@@ -66,6 +70,10 @@ export default class EmployeeProfile extends React.Component {
         this.logChange = this.logChange.bind(this);
         this.fileChangedHandler = this.fileChangedHandler.bind(this);
         this.uploadHandler = this.uploadHandler.bind(this);
+        this.handleChangeId = this.handleChangeId.bind(this);
+        this.handleChangeName = this.handleChangeName.bind(this);
+        this.handleChangeAge = this.handleChangeAge.bind(this);
+        this.handleChangeEmail = this.handleChangeEmail.bind(this);
        
     };
 
@@ -244,18 +252,50 @@ export default class EmployeeProfile extends React.Component {
     isFormValid() {
         return this.state.formValid == false ? 'error' : '';
     }
+
+    handleChangeId(event) {
+        let { studentnew } = this.state;
+        this.setState({ id: event.target.value });
+        studentnew[0].id = event.target.value;
+        console.log(this.state.studentnew, "stdnwAf");
+
+    }
+
+    handleChangeName(event) {
+        let { studentnew } = this.state;
+        this.setState({ name: event.target.value });
+        console.log(this.state.name);
+        studentnew[0].name = event.target.value;
+        
+    }
+    handleChangeAge(event) {
+        let { studentnew } = this.state;
+        this.setState({ age: event.target.value });
+        studentnew[0].age = event.target.value;
+        console.log(this.state.age);
+    }
+    handleChangeEmail(event) {
+        let {studentnew } = this.state;
+        this.setState({ email: event.target.value });
+        // [element] :event.target.value
+        studentnew[0].email = event.target.value;
+        console.log(this.state.age);
+    }
     AddLanguage(event) {
         // this.event.preventDefault();
         event.preventDefault();
         alert("Added to Array");
-       // event.target.name = event.target.value;
+        // event.target.name = event.target.value;
+        //studentnew: Object.assign(id: this.state.id, name: this.state.name, age: this.state.age, email: this.state.email);
 
-        console.log(students);
+        console.log(this.state.studentnew);
+        let { students, studentnew } = this.state;
+        students.push(studentnew[0]);
         
         this.setState({
-            students: this.state.students.concat(this.state.studentnew)
+            students
         });
-        console.log(students);
+        console.log(this.state.students);
     }
 
     saveData() {
@@ -348,7 +388,10 @@ export default class EmployeeProfile extends React.Component {
                                             />
                                             Location:
                                             <Location location={location} handleChange={this.handleChange} />
-                                            Languages:
+                                            id:<input onChange={this.handleChangeId} value={this.state.id} />
+                                            name:<input onChange={this.handleChangeName} value={this.state.name} />
+                                            age:<input onChange={this.handleChangeAge} value={this.state.age} />
+                                            email:<input onChange={this.handleChangeEmail} value={this.state.email} />
                                             <Button className="ui button" onClick={this.AddLanguage}>Add New</Button>
                                             <div>
                                                 <h1 id='title'>Language Component</h1>

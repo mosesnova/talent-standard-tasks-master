@@ -51,8 +51,16 @@ namespace Talent.Services.Profile.Domain.Services
 
         public async Task<TalentProfileViewModel> GetTalentProfile(string Id)
         {
-            //Your code here;
-            throw new NotImplementedException();
+            Employer profile = null;
+            profile = (await _employerRepository.GetByIdAsync(Id));
+
+            var result = new TalentProfileViewModel
+            {
+                Id = profile.Id
+            };
+            return result;
+
+
         }
 
         public async Task<bool> UpdateTalentProfile(TalentProfileViewModel model, string updaterId)

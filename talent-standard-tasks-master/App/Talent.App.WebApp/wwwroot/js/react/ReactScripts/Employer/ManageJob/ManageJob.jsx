@@ -79,7 +79,7 @@ export default class ManageJob extends React.Component {
             error: function (res, a, b) {
                 //this.init();
 
-                console.log(res)
+                console.log(res);
                 console.log(a)
                 console.log(b)
 
