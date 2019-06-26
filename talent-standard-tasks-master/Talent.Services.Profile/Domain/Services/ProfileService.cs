@@ -56,7 +56,9 @@ namespace Talent.Services.Profile.Domain.Services
 
             var result = new TalentProfileViewModel
             {
-                Id = profile.Id
+                Id = profile.Id,
+                FirstName = profile.PrimaryContact.FirstName
+
             };
             return result;
 

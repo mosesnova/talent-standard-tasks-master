@@ -14,6 +14,7 @@ import { Dropdown, Button } from 'semantic-ui-react';
 import Lightbox from 'react-images';
 import { LinkedAccountsComponent } from './LinkedAccountsComponent.jsx';
 import { Location } from '../Employer/CreateJob/Location.jsx';
+import Select from 'react-select';
 
 
 
@@ -22,7 +23,6 @@ export default class EmployeeProfile extends React.Component {
         super(props);
         this.state = {
             employerData: {
-                skills: []
             },
             formErrors: { name: '', email: '' },
             nameValid: false,
@@ -36,9 +36,9 @@ export default class EmployeeProfile extends React.Component {
                 { id: 4, name: 'German', age: 25, email: 'Basic' }
             ],
             skills: [
-                { id: 1, name: 'C',  level: 'Basic' },
-                { id: 2, name: 'C#', level: 'Profecient' },
-                { id: 3, name: 'MVC',level: 'Basic' }
+                { sid: 1, sname: 'C',  slevel: 'Basic' },
+                { sid: 2, sname: 'C#', slevel: 'Profecient' },
+                { sid: 3, sname: 'MVC',slevel: 'Basic' }
             ],
             workexperiences: [
                 { id: 1, company: 'Company1', position: 'Software Developer', responsibilities:'coding', start:'1/1/2010',end:'1/1/2010' },
@@ -48,12 +48,18 @@ export default class EmployeeProfile extends React.Component {
             studentnew: [
                 { id: null, name: null, age: null, email: null }
             ],
+            skillnew: [
+                {sid:null, sname:null, slevel:null}
+            ],
             selectedFile: null,
             imageName: '',
             id: '',
             name: '',
             age: '',
-            email:''
+            email: '',
+            sid:'',
+            sname: '',
+            slevel:''
         };
 
         this.loadData = this.loadData.bind(this);
@@ -74,6 +80,10 @@ export default class EmployeeProfile extends React.Component {
         this.handleChangeName = this.handleChangeName.bind(this);
         this.handleChangeAge = this.handleChangeAge.bind(this);
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
+        this.handleChangeSname = this.handleChangeSname.bind(this);
+        this.handleChangeSid = this.handleChangeSid.bind(this);
+        this.handleChangeSlevel = this.handleChangeSlevel.bind(this);
+        this.AddSkill = this.AddSkill.bind(this);
        
     };
 
@@ -112,12 +122,12 @@ export default class EmployeeProfile extends React.Component {
     }
     renderSkillTableData() {
         return this.state.skills.map((skill, index) => {
-            const { id, name, level } = skill; //destructuring
+            const { sid, sname, slevel } = skill; //destructuring
             return (
-                <tr key={id}>
-                    <td><input value={id} onChange={this.logChange} type="text" /></td>
-                    <td><input defaultValue={name} onChange={this.logChange} type="text" /></td>
-                    <td>{level}</td>
+                <tr key={sid}>
+                    <td><input value={sid} onChange={this.logChange} type="text" /></td>
+                    <td><input defaultValue={sname} onChange={this.logChange} type="text" /></td>
+                    <td>{slevel}</td>
                     <td><Button>Edit</Button></td>
                     <td><Button>Delete</Button></td>
                 </tr>
@@ -252,34 +262,45 @@ export default class EmployeeProfile extends React.Component {
     isFormValid() {
         return this.state.formValid == false ? 'error' : '';
     }
+    handleChangeSname(event) {
+        let { skillnew } = this.state;
+        this.setState({ sname: event.target.value });
+        skillnew[0].sname = event.target.value;
+    }
+    handleChangeSlevel(event) {
+        console.log("DropDown");
+        console.log(event.target.value);
+        let { skillnew } = this.state;
+        this.setState({ slevel: event.target.value });
+        skillnew[0].slevel = event.target.value;
+        console.log(skillnew[0].slevel);
+    }
+    handleChangeSid(event) {
+        let { skillnew } = this.state;
+        this.setState({ sid: event.target.value });
+        skillnew[0].sid = event.target.value;
+    }
 
     handleChangeId(event) {
         let { studentnew } = this.state;
         this.setState({ id: event.target.value });
         studentnew[0].id = event.target.value;
-        console.log(this.state.studentnew, "stdnwAf");
-
     }
 
     handleChangeName(event) {
         let { studentnew } = this.state;
         this.setState({ name: event.target.value });
-        console.log(this.state.name);
         studentnew[0].name = event.target.value;
-        
     }
     handleChangeAge(event) {
         let { studentnew } = this.state;
         this.setState({ age: event.target.value });
         studentnew[0].age = event.target.value;
-        console.log(this.state.age);
     }
     handleChangeEmail(event) {
         let {studentnew } = this.state;
         this.setState({ email: event.target.value });
-        // [element] :event.target.value
         studentnew[0].email = event.target.value;
-        console.log(this.state.age);
     }
     AddLanguage(event) {
         // this.event.preventDefault();
@@ -297,6 +318,20 @@ export default class EmployeeProfile extends React.Component {
         });
         console.log(this.state.students);
     }
+
+    AddSkill(event) {
+        event.preventDefault();
+        alert("Added to Array");
+        console.log(this.state.skillnew);
+        let { skills, skillnew } = this.state;
+        skills.push(skillnew[0]);
+
+        this.setState({
+            skills
+        });
+        console.log(this.state.skills);
+    }
+
 
     saveData() {
 
@@ -340,6 +375,23 @@ export default class EmployeeProfile extends React.Component {
                 image: { avatar: true, src: '/images/avatar/small/elliot.jpg' }
 
             }];
+        const OptionsProfeciency = [
+            {
+                label: 'Basic',
+                value: 'Basic'
+                
+            },
+            {
+                
+                label: 'Intermediate',
+                value: 'Intermediate'
+            },
+            {
+                
+                label: 'Expert',
+                value: 'Expert'
+            }
+        ];
         return (
             <BodyWrapper loaderData={this.state.loaderData} reload={this.loadData}>
                 <section className="page-body">
@@ -421,9 +473,13 @@ export default class EmployeeProfile extends React.Component {
                                             title='Skill Component'
                                             tooltip='Enter your linked details'
                                         >
-                                            <Button className="ui button" onClick={this.AddLanguage}>Add New</Button>
+                                            <Button className="ui button" onClick={this.AddSkill}>Add New Skill</Button>
                                             <div>
                                                 <h1 id='title'>Skill Component</h1>
+                                                Id:<input value={this.state.sid} onChange={this.handleChangeSid} />
+                                                Skill: <input value={this.state.sname} onChange={this.handleChangeSname} />
+                                                Profeciency:
+                                                <Select options={OptionsProfeciency} onChange={this.handleChangeSlevel} defaultValue={{ label: this.state.skillnew[0].slevel, value: this.state.skillnew[0].slevel }} />
                                                 <table id='students'>
                                                     <tbody>
                                                         {this.renderSkillTableData()}
@@ -435,7 +491,7 @@ export default class EmployeeProfile extends React.Component {
                                             title='Work Experience Component'
                                             tooltip='Enter your linked details'
                                         >
-                                            <Button className="ui button" onClick={this.AddLanguage}>Add New</Button>
+                                            <Button className="ui button" onClick={this.AddLanguage}>Add New Skill</Button>
                                             <div>
                                                 <h1 id='title'>Work Experience Component</h1>
                                                 <table id='students'>

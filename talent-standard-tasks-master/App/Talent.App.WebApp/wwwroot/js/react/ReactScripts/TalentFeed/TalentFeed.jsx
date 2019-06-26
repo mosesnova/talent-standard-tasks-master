@@ -31,7 +31,8 @@ export default class TalentFeed extends React.Component {
             loaderData: loader,
             loadingFeedData: false,
             companyDetails: null,
-            id:''
+            Id: '',
+            FirstName:''
         }
 
         this.init = this.init.bind(this);
@@ -62,7 +63,7 @@ export default class TalentFeed extends React.Component {
             type: "GET",
             success: function (res) {
                 console.log(res);
-                this.setState({ Id: res.data.id });
+                this.setState({ Id: res.data.id, FirstName: res.data.firstName });
             }.bind(this)
         });
         this.init();
@@ -75,12 +76,12 @@ export default class TalentFeed extends React.Component {
                     <div className="three wide column"><Col><Card>
                         
                         <Card.Content>
-                            <Card.Header>{this.state.Id}</Card.Header>
+                            <Card.Header>MVP Studio</Card.Header>
                             <Card.Meta>
-                                <span className='date'>Joined in 2015</span>
+                                <span className='date'>Auckland, New Zealand</span>
                             </Card.Meta>
                             <Card.Description>
-                                Moses is a musician living in Nashville.
+                                {this.state.FirstName}  We currently do not have specific skills that we deserve.
       </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
@@ -95,11 +96,17 @@ export default class TalentFeed extends React.Component {
                         <Card.Content>
                             <Card.Header>Moses</Card.Header>
                             <Card.Meta>
-                                <span className='date'>Joined in 2015</span>
+                                <span className='date'>Talent Snapshot</span>
                             </Card.Meta>
                             <Card.Description>
-                                Moses is a musician living in Nashville.
-      </Card.Description>
+                                {this.state.FirstName} 
+                            </Card.Description>
+                            <Card.Meta>
+                                <span className='date'>Visa Status</span>
+                            </Card.Meta>
+                            <Card.Description>
+                                Current
+                            </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
                             <a>
@@ -124,15 +131,7 @@ export default class TalentFeed extends React.Component {
                                     </Feed.Content>
                                 </Feed.Event>
 
-                                <Feed.Event>
-                                    <Feed.Label image='/images/avatar/small/molly.png' />
-                                    <Feed.Content>
-                                        <Feed.Date content='3 days ago' />
-                                        <Feed.Summary>
-                                            You added <a>Olivia Nova</a> as a friend.
-            </Feed.Summary>
-                                    </Feed.Content>
-                                </Feed.Event>
+                                
 
                                 <Feed.Event>
                                     <Feed.Label image='/images/avatar/small/elliot.jpg' />
