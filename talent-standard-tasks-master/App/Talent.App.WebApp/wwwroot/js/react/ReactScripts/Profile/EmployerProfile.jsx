@@ -342,11 +342,10 @@ export default class EmployeeProfile extends React.Component {
                 let languageArrays = this.state.languages;
                 console.log("lArray",languageArrays);
                 if (languageArrays) {
-                    var i = 0;
-                    $.each(languageArrays, function (index, value) {
-                        console.log("value", value[i]);
-                        i++;
-                        lArray.push(new languageName(value[i].language.trim(), value[i].language.trim()));
+                    $.each(languageArrays, function (inde, language) {
+                        $.each(language, function (i, value) {
+                            lArray.push(new languageName(value.language, value.language));
+                        });
                     });
                     console.log("New Array", languageName);
                     this.setState({ languages: lArray });
