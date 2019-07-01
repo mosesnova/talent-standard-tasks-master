@@ -253,6 +253,28 @@ namespace Talent.Services.Profile.Controllers
             throw new NotImplementedException();
         }
 
+        [HttpPost("saveProfilePhoto")]
+       // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
+        public async Task<ActionResult> SaveProfilePhoto(IFormFile file)
+        {
+            if (string.IsNullOrWhiteSpace(_environment.WebRootPath))
+            {
+                _environment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            }
+            var uploads = Path.Combine(_environment.ContentRootPath, "images");
+            var filePath = Path.Combine(uploads, file.FileName);
+            if (file.Length > 0)
+            {
+                
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+            }
+            return Json( new { filePath });
+
+        }
+
         [HttpPost("updateTalentCV")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
         public async Task<ActionResult> UpdateTalentCV()

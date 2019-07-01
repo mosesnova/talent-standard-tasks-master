@@ -19,6 +19,8 @@ import $ from 'jquery';
 
 
 
+
+
 export default class EmployeeProfile extends React.Component {
     constructor(props) {
         super(props);
@@ -67,10 +69,11 @@ export default class EmployeeProfile extends React.Component {
             lName:'SANSKRIT',
             lLevel:'BASIC',
             lId:'',
-            lCurrentUserId:'5c73526f1e00f43cfc303193'
+            lCurrentUserId: '5c73526f1e00f43cfc303193',
+            pictures: []
 
         };
-
+        this.onDrop = this.onDrop.bind(this);
         this.loadData = this.loadData.bind(this);
         this.handleUserInput = this.handleUserInput.bind(this);
         this.validateField = this.validateField.bind(this);
@@ -93,6 +96,7 @@ export default class EmployeeProfile extends React.Component {
         this.handleChangeSid = this.handleChangeSid.bind(this);
         this.handleChangeSlevel = this.handleChangeSlevel.bind(this);
         this.AddSkill = this.AddSkill.bind(this);
+        this.handleImageClick = this.handleImageClick.bind(this);
        
     };
 
@@ -101,12 +105,50 @@ export default class EmployeeProfile extends React.Component {
         loaderData.allowedUsers.push("Employer");
         loaderData.allowedUsers.push("Recruiter");
         loaderData.isLoading = false;
-        this.setState({ loaderData, })
+        this.setState({ loaderData, });
+
+        
+    }
+    
+    componentDidMount() {
+        
+        this.loadData();
+
+        
+        
+    }
+    handleImageClick(event) {
+        event.preventDefault();
+        alert("hello");
+        var file = $("#imguploader").get(0).files[0];
+        var formData = new FormData();
+        formData.set("file", file, file.name);
+        console.log(file);
+        console.log(file.name);
+        console.log(formData);
+
+        var cookies = Cookies.get('talentAuthToken');
+        $.ajax({
+            url: 'http://localhost:60290/profile/profile/saveProfilePhoto',
+            headers: {
+                'Authorization': 'Bearer ' + cookies
+            },
+            type: "POST",
+            contentType: false,
+            cache: false,
+            processData:false,
+            data: formData,
+            success: function (res) {
+                console.log(res);
+                $("#image").attr("src", res.filePath);
+            }.bind(this),
+            error: function (res) {
+                TalentUtil.notification.show("Error while saving Employer details", "error", null, null);
+            }.bind(this)
+        });
+
     }
 
-    componentDidMount() {
-        this.loadData();
-    }
     logChange(e) {
         this.setState({
             value: e.target.value
@@ -223,7 +265,7 @@ export default class EmployeeProfile extends React.Component {
                 }
             }.bind(this)
         });
-
+       
         this.init();
     }
 
@@ -345,6 +387,11 @@ export default class EmployeeProfile extends React.Component {
     onChangelanguage(event) {
         alert("Clicked");
         console.log(this.state.languageName);
+    }
+    onDrop(picture) {
+        this.setState({
+            pictures: this.state.pictures.concat(picture)
+        });
     }
     AddLanguage(event) {
         // this.event.preventDefault();
@@ -531,9 +578,10 @@ export default class EmployeeProfile extends React.Component {
                                                 </table>
                                             </div>
                                             Profile Photo:
-                                            <img src="http://www.croop.cl/UI/twitter/images/doug.jpg"  alt="logo" />
+                                            <input type="file" name="imguploader" id="imguploader" />
+                                            <img id="image" width="42" height="42" />
+                                            <button id="btnUpload" onClick={this.handleImageClick}>Upload</button>
                                            
-                                           <button onClick={this.uploadHandler}>Upload!</button>
                                         </FormItemWrapper>
 
                                         <FormItemWrapper
@@ -588,7 +636,9 @@ export default class EmployeeProfile extends React.Component {
                                                 selection
                                                 options={Options}
                                             />
+                                           
                                         </FormItemWrapper>
+                                        
                                         <div className="sixteen wide column">
                                             <div>
                                                 <input type="button" className="ui button right floated" onClick={() => window.history.go(-1)} value="Cancel"></input>
@@ -596,6 +646,7 @@ export default class EmployeeProfile extends React.Component {
                                             </div>
                                         </div >
                                     </div>
+                                   
                                 </form>
                             </div>
                         </div>
