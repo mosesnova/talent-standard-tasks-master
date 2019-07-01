@@ -15,6 +15,7 @@ import Lightbox from 'react-images';
 import { LinkedAccountsComponent } from './LinkedAccountsComponent.jsx';
 import { Location } from '../Employer/CreateJob/Location.jsx';
 import Select from 'react-select';
+import $ from 'jquery';
 
 
 
@@ -59,7 +60,8 @@ export default class EmployeeProfile extends React.Component {
             email: '',
             sid:'',
             sname: '',
-            slevel:''
+            slevel: '',
+            languages:[]
         };
 
         this.loadData = this.loadData.bind(this);
@@ -302,21 +304,57 @@ export default class EmployeeProfile extends React.Component {
         this.setState({ email: event.target.value });
         studentnew[0].email = event.target.value;
     }
+    onChangelanguage(event) {
+        alert("Clicked");
+    }
     AddLanguage(event) {
         // this.event.preventDefault();
         event.preventDefault();
-        alert("Added to Array");
-        // event.target.name = event.target.value;
-        //studentnew: Object.assign(id: this.state.id, name: this.state.name, age: this.state.age, email: this.state.email);
+        //alert("Added to Array");
+        //// event.target.name = event.target.value;
+        ////studentnew: Object.assign(id: this.state.id, name: this.state.name, age: this.state.age, email: this.state.email);
 
-        console.log(this.state.studentnew);
-        let { students, studentnew } = this.state;
-        students.push(studentnew[0]);
+        //console.log(this.state.studentnew);
+        //let { students, studentnew } = this.state;
+        //students.push(studentnew[0]);
         
-        this.setState({
-            students
+        //this.setState({
+        //    students
+        //});
+        //console.log(this.state.students);
+        var cookies = Cookies.get('talentAuthToken');
+        $.ajax({
+            url: 'http://localhost:60290/profile/profile/getLanguage',
+            headers: {
+                'Authorization': 'Bearer ' + cookies,
+                'Content-Type': 'application/json'
+            },
+            type: "GET",
+            success: function (languages) {
+                console.log(languages);
+                this.setState({ languages: languages });
+                console.log(this.state.languages);
+                function languageName(value, label) {
+                    this.value = value;
+                    this.label = label;
+                }
+                var lArray = [];
+                let languageArrays = this.state.languages;
+                console.log("lArray",languageArrays);
+                if (languageArrays) {
+                    var i = 0;
+                    $.each(languageArrays, function (index, value) {
+                        console.log("value", value[i]);
+                        i++;
+                        lArray.push(new languageName(value[i].language.trim(), value[i].language.trim()));
+                    });
+                    console.log("New Array", languageName);
+                    this.setState({ languages: lArray });
+                }
+            }.bind(this)
         });
-        console.log(this.state.students);
+
+
     }
 
     AddSkill(event) {
@@ -441,9 +479,10 @@ export default class EmployeeProfile extends React.Component {
                                             Location:
                                             <Location location={location} handleChange={this.handleChange} />
                                             id:<input onChange={this.handleChangeId} value={this.state.id} />
-                                            name:<input onChange={this.handleChangeName} value={this.state.name} />
+                                            language:<Select onChange={this.onChangelanguage} options={this.state.languages}/>
                                             age:<input onChange={this.handleChangeAge} value={this.state.age} />
                                             email:<input onChange={this.handleChangeEmail} value={this.state.email} />
+                                           
                                             <Button className="ui button" onClick={this.AddLanguage}>Add New</Button>
                                             <div>
                                                 <h1 id='title'>Language Component</h1>

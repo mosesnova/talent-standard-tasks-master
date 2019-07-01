@@ -87,7 +87,7 @@ namespace Talent.Services.Profile.Controllers
         #region Talent
 
         [HttpGet("getProfile")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
         public async Task<IActionResult> GetProfile()
         {
             var userId = _userAppContext.CurrentUserId;
@@ -134,11 +134,14 @@ namespace Talent.Services.Profile.Controllers
         }
 
         [HttpGet("getLanguage")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "employer,talent")]
         public async Task<IActionResult> GetLanguages()
         {
-            //Your code here;
-            throw new NotImplementedException();
+           
+            var languages =  await _userLanguageRepository.Get( a=> a.UserId == "5c8078911a2aab37688d9169");
+            return Json(new { languages });
+            
+            
         }
 
         [HttpPost("addLanguage")]
