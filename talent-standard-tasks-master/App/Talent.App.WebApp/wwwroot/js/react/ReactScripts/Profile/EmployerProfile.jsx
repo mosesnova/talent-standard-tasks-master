@@ -62,7 +62,13 @@ export default class EmployeeProfile extends React.Component {
             sname: '',
             slevel: '',
             languages: [],
-            languageName:''
+            languageName: '',
+            languageData: {},
+            lName:'SANSKRIT',
+            lLevel:'BASIC',
+            lId:'',
+            lCurrentUserId:'5c73526f1e00f43cfc303193'
+
         };
 
         this.loadData = this.loadData.bind(this);
@@ -355,6 +361,36 @@ export default class EmployeeProfile extends React.Component {
         //    students
         //});
         //console.log(this.state.students);
+        var data = {
+           Name:this.state.lName,
+           Level:this.state.lLevel,
+           Id: this.state.lId,
+           CurrentUserId: this.state.lCurrentUserId
+        };
+        var cookies = Cookies.get('talentAuthToken');
+        $.ajax({
+            url: 'http://localhost:60290/profile/profile/addLanguage',
+            headers: {
+                'Authorization': 'Bearer ' + cookies,
+                'Content-Type': 'application/json'
+            },
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(data),
+            success: function (res) {
+                if (res.success) {
+                    TalentUtil.notification.show("Language details saved successfully", "success", null, null);
+                }
+                else {
+                    TalentUtil.notification.show("Error while saving Language details", "error", null, null);
+                }
+            }.bind(this),
+            error: function (res) {
+                TalentUtil.notification.show("Error while saving Employer details", "error", null, null);
+            }.bind(this)
+        });
+
         
 
     }

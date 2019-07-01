@@ -134,7 +134,7 @@ namespace Talent.Services.Profile.Controllers
         }
 
         [HttpGet("getLanguage")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "employer,talent")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "employer,talent")]
         public async Task<IActionResult> GetLanguages()
         {
            
@@ -145,11 +145,15 @@ namespace Talent.Services.Profile.Controllers
         }
 
         [HttpPost("addLanguage")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "employer,talent")]
         public ActionResult AddLanguage([FromBody] AddLanguageViewModel language)
         {
-            //Your code here;
-            throw new NotImplementedException();
+            UserLanguage ul = new UserLanguage();
+            ul.UserId = language.CurrentUserId;
+            ul.LanguageLevel = language.Level;
+            ul.Language = language.Name;
+            _userLanguageRepository.Add(ul);
+            return Json(new { Success = true });
         }
 
         [HttpPost("updateLanguage")]
