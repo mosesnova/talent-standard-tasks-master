@@ -61,7 +61,8 @@ export default class EmployeeProfile extends React.Component {
             sid:'',
             sname: '',
             slevel: '',
-            languages:[]
+            languages: [],
+            languageName:''
         };
 
         this.loadData = this.loadData.bind(this);
@@ -177,16 +178,47 @@ export default class EmployeeProfile extends React.Component {
             success: function (res) {
                 let employerData = null;
                 if (res.employer) {
-                    employerData = res.employer
+                    employerData = res.employer;
                     //console.log("employerData", employerData)
                 }
-                this.updateWithoutSave(employerData)
+                this.updateWithoutSave(employerData);
             }.bind(this),
             error: function (res) {
-                console.log(res.status)
+                console.log(res.status);
             }
-        }) 
-        this.init()
+        });
+        //var cookies = Cookies.get('talentAuthToken');
+        $.ajax({
+            url: 'http://localhost:60290/profile/profile/getLanguage',
+            headers: {
+                'Authorization': 'Bearer ' + cookies,
+                'Content-Type': 'application/json'
+            },
+            type: "GET",
+            success: function (languages) {
+                console.log(languages);
+                this.setState({ languages: languages });
+                console.log(this.state.languages);
+                function languageName(value, label) {
+                    this.value = value;
+                    this.label = label;
+                }
+                var lArray = [];
+                let languageArrays = this.state.languages;
+                console.log("lArray", languageArrays);
+                if (languageArrays) {
+                    $.each(languageArrays, function (inde, language) {
+                        $.each(language, function (i, value) {
+                            lArray.push(new languageName(value.language, value.language));
+                        });
+                    });
+                    console.log("New Array", languageName);
+                    this.setState({ languages: lArray });
+                }
+            }.bind(this)
+        });
+
+        this.init();
     }
 
     updateForComponentId(componentId, newValues) {
@@ -306,6 +338,7 @@ export default class EmployeeProfile extends React.Component {
     }
     onChangelanguage(event) {
         alert("Clicked");
+        console.log(this.state.languageName);
     }
     AddLanguage(event) {
         // this.event.preventDefault();
@@ -322,37 +355,7 @@ export default class EmployeeProfile extends React.Component {
         //    students
         //});
         //console.log(this.state.students);
-        var cookies = Cookies.get('talentAuthToken');
-        $.ajax({
-            url: 'http://localhost:60290/profile/profile/getLanguage',
-            headers: {
-                'Authorization': 'Bearer ' + cookies,
-                'Content-Type': 'application/json'
-            },
-            type: "GET",
-            success: function (languages) {
-                console.log(languages);
-                this.setState({ languages: languages });
-                console.log(this.state.languages);
-                function languageName(value, label) {
-                    this.value = value;
-                    this.label = label;
-                }
-                var lArray = [];
-                let languageArrays = this.state.languages;
-                console.log("lArray",languageArrays);
-                if (languageArrays) {
-                    $.each(languageArrays, function (inde, language) {
-                        $.each(language, function (i, value) {
-                            lArray.push(new languageName(value.language, value.language));
-                        });
-                    });
-                    console.log("New Array", languageName);
-                    this.setState({ languages: lArray });
-                }
-            }.bind(this)
-        });
-
+        
 
     }
 
@@ -478,7 +481,7 @@ export default class EmployeeProfile extends React.Component {
                                             Location:
                                             <Location location={location} handleChange={this.handleChange} />
                                             id:<input onChange={this.handleChangeId} value={this.state.id} />
-                                            language:<Select onChange={this.onChangelanguage} options={this.state.languages}/>
+                                            language:<Select onChange={this.onChangelanguage} value={this.state.languageName} options={this.state.languages} />
                                             age:<input onChange={this.handleChangeAge} value={this.state.age} />
                                             email:<input onChange={this.handleChangeEmail} value={this.state.email} />
                                            
